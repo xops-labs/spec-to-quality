@@ -1,0 +1,13 @@
+# build output
+publish/
+coverage/
+backend/**/bin/
+backend/**/obj/
+backend/src/IncidentApp.Api/wwwroot/
+frontend/node_modules/
+e2e/node_modules/
+*.db
+*.db-shm
+*.db-wal
+TestResults/
+frontend/coverage/

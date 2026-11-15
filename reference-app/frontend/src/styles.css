@@ -1,0 +1,20 @@
+:root { font-family: system-ui, sans-serif; color: #1c2430; }
+body { margin: 0; background: #f5f6f8; }
+.topbar { display: flex; justify-content: space-between; align-items: center; background: #1c2430; color: #fff; padding: 0.6rem 1rem; }
+.topbar a { color: #fff; margin-right: 1rem; text-decoration: none; }
+.who span { margin-right: 0.75rem; }
+main { padding: 1rem; max-width: 1100px; margin: 0 auto; }
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid #e3e6ea; }
+.row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin: 0.5rem 0; }
+.field-error { color: #b42318; margin: 0.2rem 0; }
+.banner.error { background: #fde8e8; color: #7a1d1d; padding: 0.5rem 1rem; }
+.toast { background: #e6f4ea; color: #1e4620; padding: 0.5rem 1rem; }
+.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.4); display: flex; align-items: center; justify-content: center; }
+.dialog { background: #fff; padding: 1rem 1.25rem; min-width: 320px; border-radius: 6px; display: flex; flex-direction: column; gap: 0.5rem; }
+.card { background: #fff; padding: 0.75rem 1rem; margin-bottom: 1rem; border-radius: 6px; }
+.kv { display: grid; grid-template-columns: 180px 1fr; gap: 0.25rem 1rem; }
+label { display: block; margin-top: 0.5rem; }
+input, select, textarea { font: inherit; padding: 0.3rem; }
+textarea { width: 100%; min-height: 4rem; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; }

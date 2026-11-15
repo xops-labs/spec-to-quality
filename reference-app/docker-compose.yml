@@ -1,0 +1,27 @@
+# Reference baseline: PostgreSQL + the app (API + built SPA on one origin).
+# The signing key and passwords below are local-development placeholders, not secrets.
+# S2Q_TEST_MODE=true enables the test-only endpoints (/api/v1/test/*); set it to "false" for a normal run.
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: incidentdesk
+      POSTGRES_PASSWORD: incidentdesk
+      POSTGRES_DB: incidentdesk
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U incidentdesk -d incidentdesk"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__Default: "Host=db;Port=5432;Database=incidentdesk;Username=incidentdesk;Password=incidentdesk"
+      Jwt__SigningKey: "local-dev-only-signing-key-change-me-0123456789abcdef"
+      S2Q_TEST_MODE: "true"
+    ports:
+      - "8080:8080"
