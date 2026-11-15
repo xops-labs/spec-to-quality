@@ -1,6 +1,6 @@
 # Spec-to-Quality (S2Q)
 
-**Status: Phase 1 draft awaiting review.** No experiments have been run and there are no results yet.
+**Status: Phase 1 documents drafted; Phase 2 decisions locked (2026-11-15); benchmark spec `v1.0.0-rc1` frozen as a release candidate.** No experiments have been run and there are no results yet.
 
 S2Q is an independent, open-source research project that asks:
 
@@ -19,12 +19,14 @@ Specification → AI Model → Generated Application → Static Analysis → Rem
 - **Not claimed:** that any model is superior, that SonarQube proves production readiness, or that static findings are confirmed defects.
 
 ## Current status
-Phase 1 (vision and research methodology) is drafted and awaiting review. Phases 2–7 are planned in the roadmap. See [docs/phase1-summary.md](docs/phase1-summary.md) for the decisions that must be made before Phase 2.
+Phase 1 (vision and research methodology) is drafted. On 2026-11-15 the maintainer locked: **.NET backend (ASP.NET Core, EF Core, PostgreSQL) with a TypeScript/React frontend**, **`mini-swe-agent`** as the harness, **provider-default reasoning effort**, and **at most 3 Stage B remediation rounds**. The frozen product specification is [docs/benchmark-spec.md](docs/benchmark-spec.md) (`v1.0.0-rc1`). Still open: the API budget cap, quality-gate thresholds and SonarQube edition, UI test tooling, the human-time sub-study, mutation tooling and license/affiliations — see [docs/decisions.md](docs/decisions.md). Phases 3–7 are planned in the roadmap.
 
 ## Documentation index
 | Document | Purpose |
 |---|---|
-| [docs/phase1-summary.md](docs/phase1-summary.md) | Concise summary and open decisions |
+| [docs/decisions.md](docs/decisions.md) | Decision log: locked decisions (stack, harness, reasoning effort, Stage B cap) and open items |
+| [docs/benchmark-spec.md](docs/benchmark-spec.md) | **Frozen benchmark application specification v1.0.0-rc1** (domain model, state machine, SLA/clock, API contract, UI test-id contract, acceptance criteria) |
+| [docs/phase1-summary.md](docs/phase1-summary.md) | Concise Phase 1 summary (decision status annotated) |
 | [docs/vision.md](docs/vision.md) | Problem, motivation, vision, research questions, scope, success criteria |
 | [docs/research-methodology.md](docs/research-methodology.md) | Hypotheses, variables, design, stages, statistics, threats to validity |
 | [docs/quality-metrics.md](docs/quality-metrics.md) | Metric catalog (with SonarQube keys), limitations, gate principles, cost methodology |

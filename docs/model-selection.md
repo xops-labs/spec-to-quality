@@ -111,7 +111,7 @@ Anthropic, OpenAI and Google each contribute multiple tiers, so "same vendor, di
 
 **5.2 Model identity** — per run, store: requested model ID; the **model ID returned** in the API response; any system-fingerprint/version header; provider region/endpoint; date of provider documentation consulted.
 
-**5.3 Execution configuration** — per run: reasoning-effort setting (explicit value even when "default"), max output tokens, temperature/top-p when permitted (many reasoning models do not allow them — record "not settable"), tool allow-list, context-management settings of the harness, budgets (turns, wall-clock, tool calls, dollar ceiling), seed where supported, retry policy, prompt-template hash, specification commit hash.
+**5.3 Execution configuration** — per run: reasoning-effort setting (`provider_default` plus the effective default documented by the provider on the snapshot date, or "not documented"; D-003), max output tokens, temperature/top-p when permitted (many reasoning models do not allow them — record "not settable"), tool allow-list, context-management settings of the harness, budgets (turns, wall-clock, tool calls, dollar ceiling), seed where supported, retry policy, prompt-template hash, specification commit hash.
 
 **5.4 Harness identity** — harness name, version/tag and commit, container image digest, LiteLLM (or equivalent) version if used, and any provider-specific adapters.
 
@@ -149,11 +149,11 @@ Under this assumption the spread across the core set is roughly two orders of ma
 | **OpenCode** (MIT) | Terminal coding agent supporting many providers. Pros: realistic tool set. Cons: fast-moving releases; pin carefully. |
 | Vendor-native agents | Useful as a **sensitivity arm** for a subset; not comparable across vendors. |
 
-**Recommendation (to be confirmed by pilot):** primary arm = `mini-swe-agent` *or* OpenHands (decision after a feasibility pilot on a small dummy spec); sensitivity arm = a second harness for a subset of configurations. Report all results as **model + harness + settings** configurations (methodology §6). Recent literature supports treating the harness as a first-class variable (originality review G1–G4).
+**Decision (locked 2026-11-15, [decisions.md](decisions.md) D-002):** primary arm = `mini-swe-agent` (a feasibility pilot on a small dummy spec still checks that every core model works in it); sensitivity arm = a second harness (OpenHands/OpenCode) for a subset of configurations — optional, still open (O-010). Report all results as **model + harness + settings** configurations (methodology §6). Recent literature supports treating the harness as a first-class variable (originality review G1–G4).
 
 ## 8. Open decisions for Phase 3/4
 - Final tier rule for promotional prices.
 - Core vs reserve membership after harness feasibility testing (a model that cannot reliably use the harness's tool-calling format should be flagged, not silently dropped).
-- Reasoning-effort policy: provider default for all vs. a matched explicit setting. Effort changes both cost and quality; both choices are defensible; whichever is chosen must be pre-registered.
+- Reasoning-effort policy: **locked 2026-11-15 to provider default for all models** (D-003). Effort changes both cost and quality, so effort differences are part of each model's effect; the effective default per model is recorded in the run manifest.
 - Whether to self-host an open-weight model for a stronger reproducibility arm.
 - Verification of Mistral/Qwen model IDs and prices if they are added.

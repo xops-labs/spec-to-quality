@@ -68,7 +68,7 @@ Each hypothesis states the claim, what would **support** it, what would **contra
 | Factor | Levels | Purpose |
 |---|---|---|
 | Agent harness | primary harness vs. a second open-source harness | Quantify model×harness interaction (RQ9). |
-| Reasoning-effort setting | provider default vs. one alternative | Effort settings change both quality and cost. |
+| Reasoning-effort setting | **provider default (locked 2026-11-15, D-003)**; an alternative effort level is an optional exploratory extension, not planned | Effort settings change both quality and cost; with provider defaults, effort differences are part of the model effect. |
 
 ### 2.3 Dependent variables (measured)
 
@@ -77,7 +77,7 @@ Defined fully in [quality-metrics.md](quality-metrics.md). In brief: build succe
 ### 2.4 Controlled variables (held constant)
 
 1. **Specification** — one frozen, version-controlled document with acceptance criteria (Phase 2); same text for every run.
-2. **Technology stack** — identical language/framework/database/test frameworks/build tool, fixed in the specification **[DECIDE]**.
+2. **Technology stack** — identical language/framework/database/test frameworks/build tool, fixed in the specification. **Locked 2026-11-15** ([decisions.md](decisions.md) D-001): .NET (ASP.NET Core Web API, EF Core, PostgreSQL) + TypeScript/React; spec: [benchmark-spec.md](benchmark-spec.md).
 3. **Implementation instructions** — one prompt template; no model-specific wording.
 4. **Harness** — same harness, version, tool set, permissions, and sandbox image wherever technically possible.
 5. **Budgets** — equal wall-clock, step/turn, and tool-call limits for all configurations; a high *safety* cost ceiling applied equally (see §4.3 for the token-vs-dollar dilemma).
@@ -112,12 +112,12 @@ Provider-side nondeterminism, silent model updates behind an alias, routing/load
 1. Compute Gate status for the Stage A snapshot. If already passing, record "gate passed at Stage A" with zero remediation cost.
 2. Otherwise start Stage B: the agent (same configuration, same harness) receives its own findings through a **fixed, model-agnostic feedback template** — e.g., a structured list of Sonar issues (rule key, file, line, message, severity/impact) and failed gate conditions — plus the instruction to remediate **while preserving functional behaviour**.
 3. After each iteration the pipeline rebuilds, re-runs the **visible** (agent-accessible) tests and Sonar, and re-evaluates the gate. The hidden acceptance suite is run for regression measurement after each iteration but **its failures are not fed back** unless the Phase 2 decision says otherwise **[DECIDE]**.
-4. **Stopping criteria (fixed in advance):** gate passes; iteration cap reached **[PROPOSED: 5 iterations]**; per-stage budget exhausted; no net reduction in gate-relevant issues for *k* consecutive iterations **[PROPOSED: k = 2]**; agent self-reports inability. Reaching a stop without passing = *gate not reached*, a first-class result.
+4. **Stopping criteria (fixed in advance):** gate passes; round cap reached (**locked 2026-11-15: at most 3 rounds**, D-004); per-stage budget exhausted; no net reduction in gate-relevant issues for *k* consecutive iterations **[PROPOSED: k = 2]**; agent self-reports inability. Reaching a stop without passing = *gate not reached*, a first-class result.
 5. **Anti-gaming controls:** the pipeline rejects remediation by suppression — added `// NOSONAR`, `@SuppressWarnings`, changes to Sonar configuration/exclusions, deleted or disabled tests, lowered coverage thresholds, removal of files from the scan scope — and counts them as *integrity violations* reported separately. This addresses Goodhart-style effects (§8).
 6. Record per iteration: issues resolved/introduced/unchanged, regressions in acceptance and visible tests, tokens, time, cost.
 
 ### 4.3 Budgets — decision to finalize
-A fixed **token** budget is fairest for comparing behaviour; a fixed **dollar** budget is fairest for comparing economics but makes cheap models run far longer. Proposal: equal iteration/turn/tool-call/wall-clock limits for all configurations (behavioural equivalence) **plus** one identical high dollar ceiling as a safety stop, and report cost as an *outcome*, not a constraint. **[DECIDE]** after the pilot reveals the token distribution.
+A fixed **token** budget is fairest for comparing behaviour; a fixed **dollar** budget is fairest for comparing economics but makes cheap models run far longer. Proposal: equal iteration/turn/tool-call/wall-clock limits for all configurations (behavioural equivalence) **plus** one identical high dollar ceiling as a safety stop, and report cost as an *outcome*, not a constraint. The budget cap is **open** (O-001 in [decisions.md](decisions.md)) until the pilot reveals the token distribution.
 
 ### 4.4 Measured human intervention (sub-study, optional)
 The initial experiment contains **no human correction** of code. "Measured human intervention time" in the brief's economics list is addressed as a **separate, clearly labelled sub-study**: for a small sample of stage-end artifacts, a human timer-based protocol measures the time to resolve a defined set of remaining findings. It is never mixed with agent-only results. Design is a Phase 2 decision **[DECIDE]**.
@@ -129,7 +129,7 @@ SonarQube with pinned edition/version, a pinned rule profile (no ad-hoc rule cha
 
 ### 5.2 Independent validation
 - **Hidden acceptance suite** authored in Phase 2 from the specification, **not visible** to agents and written by someone other than the model under test. Tests exercise the public interface (HTTP API and, where feasible, UI) so they work for any internal design.
-- **Mutation testing** (e.g., PIT for Java or StrykerJS for JavaScript/TypeScript — candidate tools, repositories exist, not yet piloted) applied to a defined scope to estimate how well the *generated* tests detect injected faults. Mutation scores are an approximation of test effectiveness, not proof; the link between mutants and real faults is itself an object of research (Just et al., FSE 2014 — citation unverified, see originality review).
+- **Mutation testing** (suggested candidates: Stryker.NET for C# and StrykerJS for TypeScript — not yet piloted; decision O-005 in [decisions.md](decisions.md)) applied to a defined scope to estimate how well the *generated* tests detect injected faults. Mutation scores are an approximation of test effectiveness, not proof; the link between mutants and real faults is itself an object of research (Just et al., FSE 2014 — citation unverified, see originality review).
 
 ### 5.3 Specification fidelity
 Each acceptance requirement is traceable by ID. Fidelity = proportion of requirements for which an independent check (acceptance test or defined manual rubric) confirms behaviour; unspecified-but-implemented behaviour is recorded separately (scope creep). The fidelity rubric and its inter-rater procedure are Phase 2 deliverables.
@@ -141,7 +141,7 @@ Provider-reported token usage per API call is stored raw (input, cached-read, ca
 
 A coding agent is "model + harness"; position and empirical papers from 2026 argue the harness can matter as much as, or more than, the model (Zhang et al. 2026; Vats & Golev 2026; Lewis 2026; Zhao, Poskitt & Lo 2026 — see originality review, *harness* section). Vendor-trained models may also behave better in the vendor's own harness. S2Q therefore:
 
-1. Uses **one common open-source, multi-provider harness** as the primary arm so that the *tool surface and orchestration are identical*. Leading candidates: `mini-swe-agent` (minimal bash-only agent, multi-provider through LiteLLM — maximises comparability, minimal scaffolding) and OpenHands or OpenCode (richer tool surfaces, closer to what practitioners use). The primary choice is **[DECIDE]** in Phase 3 after a pilot.
+1. Uses **one common open-source, multi-provider harness** as the primary arm so that the *tool surface and orchestration are identical*. Leading candidates: `mini-swe-agent` (minimal bash-only agent, multi-provider through LiteLLM — maximises comparability, minimal scaffolding) and OpenHands or OpenCode (richer tool surfaces, closer to what practitioners use). **Locked 2026-11-15 (D-002): `mini-swe-agent` is the primary harness**; a Phase 3 pilot still verifies that every core model can use it, and models that cannot are flagged rather than silently dropped.
 2. Reports results as **configuration results**, never "model X is better".
 3. Optionally runs a **sensitivity arm** with a second harness (and/or a vendor-native harness for a subset), enabling a model × harness interaction estimate. Without such an arm the variance decomposition (RQ9) is *not identifiable* and will not be claimed.
 4. Records tool-call mix, turn counts, context-management behaviour, and unavoidable per-provider integration differences (tool-calling format, reasoning-token handling, caching).

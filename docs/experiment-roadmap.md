@@ -17,8 +17,8 @@ Principles across all phases: pre-register before confirmatory runs; preserve ra
 
 - **Objective:** produce **one finalized, version-controlled engineering specification** and the independent evaluation assets derived from it.
 - **Activities:**
-  1. Decide the technology stack (Phase 1 lean: a JVM backend with a TypeScript/React frontend, with caveats — see benchmark-application.md), persistence engine, build tool and test frameworks.
-  2. Author the specification: domain model, functional requirements with unique IDs, non-functional constraints that are *objectively testable*, API contracts, UI behaviour defined at the level the acceptance tests can check, data-validation rules, error behaviour, seed data.
+  1. ~~Decide the technology stack~~ **Done 2026-11-15** ([decisions.md](decisions.md) D-001): .NET (ASP.NET Core Web API, EF Core, PostgreSQL) + TypeScript/React; xUnit + `coverlet`, Vitest.
+  2. Author the specification (**drafted: [benchmark-spec.md](benchmark-spec.md) v1.0.0-rc1, 2026-11-15**): domain model, functional requirements with unique IDs, non-functional constraints that are *objectively testable*, API contracts, UI behaviour defined at the level the acceptance tests can check, data-validation rules, error behaviour, seed data.
   3. Author the **hidden acceptance test suite** and traceability matrix (requirement ID ↔ tests); review for ambiguity and for leakage of implementation choices.
   4. Define the **fidelity rubric** (and inter-rater procedure).
   5. Define the **quality gate** (conditions and thresholds, strict/lenient variants), **Stage B feedback template**, iteration/budget/stopping rules, and **integrity checks**.
@@ -32,7 +32,7 @@ Principles across all phases: pre-register before confirmatory runs; preserve ra
 ## Phase 3 — Experiment harness
 
 - **Objective:** build the reproducible pipeline: sandboxing, model invocation through the common harness, Stage A/B orchestration, scanning, test execution, data capture.
-- **Activities:** choose and pin the harness (mini-swe-agent / OpenHands / OpenCode — decision after a feasibility pilot); build the sandbox image with pinned toolchains; set up SonarQube (pinned) and scanner automation; implement coverage and mutation pipelines; implement raw-data capture (usage logs, transcripts, run records); implement integrity checks; implement cost computation from pricing snapshots; implement run randomisation and the analysis scripts (statistics from methodology §7); build a minimal dashboard.
+- **Activities:** pin the harness (**`mini-swe-agent`, locked 2026-11-15**, D-002; feasibility pilot still verifies that every core model can use it; an optional second-harness sensitivity arm is open); build the sandbox image with pinned toolchains; set up SonarQube (pinned) and scanner automation; implement coverage and mutation pipelines; implement raw-data capture (usage logs, transcripts, run records); implement integrity checks; implement cost computation from pricing snapshots; implement run randomisation and the analysis scripts (statistics from methodology §7); build a minimal dashboard.
 - **Deliverables:** harness code, container definitions, configuration files, run-record schema, analysis scripts, harness README; the power-simulation script.
 - **Exit criteria:** an end-to-end **dry run with a trivial dummy spec** passes; a **pilot with n = 3 per configuration** completes; pilot yields cost/token/variance estimates used to finalise *n*, budgets and gate thresholds; pilot data is labelled and excluded from confirmatory analysis.
 - **Risks:** provider integration differences (tool-calling formats, reasoning-token handling); scanner nondeterminism; harness bugs favouring some models; sandbox network policy; pipeline cost overruns.
@@ -71,4 +71,4 @@ Principles across all phases: pre-register before confirmatory runs; preserve ra
 
 ## Cross-phase decision log (to be maintained as `docs/decisions/`)
 
-Record every finalized decision: stack, harness, effort settings, budgets, gate thresholds, *n*, models, any deviation, with date and rationale.
+Every finalized decision is recorded in [decisions.md](decisions.md) (stack, harness, effort settings, budgets, gate thresholds, *n*, models, any deviation, with date and rationale). Locked so far: stack, harness, reasoning-effort policy, Stage B round cap; open: budget cap, gate thresholds and SonarQube edition, UI test tooling, human-time sub-study, mutation tooling, license/affiliations.

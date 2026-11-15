@@ -1,6 +1,6 @@
 # Spec-to-Quality (S2Q) — Benchmark Application Recommendation
 
-> **Status:** Phase 1 draft awaiting review. This is a **selection rationale only**. The detailed application specification belongs to Phase 2 and is deliberately not written here.
+> **Status:** Phase 1 selection rationale (historical). The detailed application specification is now in [benchmark-spec.md](benchmark-spec.md) (v1.0.0-rc1, 2026-11-15) and the locked stack decision is in [decisions.md](decisions.md) D-001 (**.NET + PostgreSQL backend, TypeScript/React frontend**, superseding the JVM lean noted below).
 
 ## 1. Criteria (from the project brief)
 
@@ -41,12 +41,12 @@ Ratings are qualitative judgements by the author of this document (✔ strong, �
 | **Contamination/common patterns** (C10): ticket and incident trackers are common in training corpora | Use a custom domain model and unusual-but-plausible rules; do not reuse public repositories or benchmark tasks; acknowledge residual contamination as a limitation. |
 | **Time-dependent rules** (SLA timers, escalation) hurt determinism (C11) | Specify an injectable clock and a test-only time-control endpoint or configuration, defined in the spec; evaluate by advancing time, not by sleeping. Note this adds an explicit testability requirement to the spec. |
 | **Scope creep / spec bloat** | Freeze a "core" scope; label extensions as optional and exclude them from the primary comparison. |
-| **UI testability constraints reduce design freedom** | Specify the minimum UI contract (roles/labels or test-ids); keep other UI design free; or make the primary acceptance suite API-level with a smaller UI check. **[DECIDE]** |
+| **UI testability constraints reduce design freedom** | Specify the minimum UI contract (roles/labels or test-ids); keep other UI design free; or make the primary acceptance suite API-level with a smaller UI check. **Resolved in spec v1.0.0-rc1:** a `data-testid` contract (spec §12) plus a mostly API-level acceptance suite (126 of 154 criteria are API-level). |
 | **Spec-authorship bias** | Author the spec and tests before any run; disclose any AI assistance; independent review. |
 | **Cost** | Size the core scope after the pilot; keep the reserve scope out of confirmatory runs. |
 
-### What is *not* decided here
-Technology stack, exact entity list, API shape, UI details, non-functional constraints, seed data, and test contracts. Phase 1 only notes the **current lean**: a typed backend (for example JVM with Spring Boot) with a TypeScript/React frontend, because PIT (JVM) and StrykerJS (JS/TS) are candidate mutation tools and SonarQube's analyzers for Java and TypeScript are mature. **Caveats:** results are language/stack-specific; the maintainer's familiarity with a stack could bias spec writing; model familiarity with a stack varies and cannot be controlled. The stack decision belongs to Phase 2 and should be justified in writing.
+### What was left open in Phase 1 and how it is resolved
+Phase 1 deliberately left the technology stack, entity list, API shape, UI details, non-functional constraints, seed data and test contracts open, noting only a **lean** toward a JVM backend (Spring Boot) with a TypeScript/React frontend. **Update 2026-11-15:** the maintainer locked **.NET (ASP.NET Core Web API, EF Core, PostgreSQL) with a TypeScript/React frontend** ([decisions.md](decisions.md) D-001), and the detailed specification is [benchmark-spec.md](benchmark-spec.md). Candidate mutation tools become Stryker.NET (C#) and StrykerJS (TypeScript), coverage uses `coverlet`, and SonarQube analysis uses its C# and TypeScript support (all candidate tools, versions to be verified and pinned in Phase 3; not yet piloted). **Caveats unchanged:** results are language/stack-specific; the maintainer's familiarity with a stack could bias spec writing; model familiarity with a stack varies and cannot be controlled.
 
 ## 4. Why not pick a public benchmark task?
 Public tasks are widely seen by model developers; OpenAI has stated it no longer evaluates SWE-bench Verified (see originality review B5), and METR published a note titled "Many SWE-bench-Passing PRs Would Not Be Merged into Main" (B6; we verified the title and date only). Those sources motivate using a **custom, newly written specification** for S2Q, while acknowledging that a custom task cannot eliminate every contamination path and also gives up cross-benchmark comparability.

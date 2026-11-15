@@ -18,9 +18,9 @@
 | SonarQube Community Build | Release notes list 26.11.0.134175 as the latest at check time | exact version + Docker image digest |
 | SonarQube Server | Documentation version 2026.5 exists (commercial editions) | only if Community Build lacks a required feature |
 | Language analyzers | Version bundled with the pinned server; language list in the Community Build docs | plugin versions |
-| Scanner | SonarScanner for Maven/Gradle/NPM or CLI | scanner version |
-| Coverage | e.g., JaCoCo (Java) / Istanbul-nyc or c8 (JS/TS) | tool + version |
-| Mutation testing | candidate tools: PIT (hcoles/pitest, Apache-2.0) for JVM; StrykerJS (stryker-mutator/stryker-js, Apache-2.0) for JS/TS — repositories verified to exist, **not yet piloted** | tool, operator set, scope, timeout |
+| Scanner | SonarScanner for .NET (C#) and SonarScanner CLI/NPM (TypeScript) feeding one SonarQube instance (stack locked 2026-11-15: .NET + TypeScript/React) | scanner version, plugin/analyzer versions, edition |
+| Coverage | `coverlet` (Cobertura) for .NET; V8 or Istanbul/nyc via the frontend test runner (LCOV/Cobertura) for TypeScript | tool + version |
+| Mutation testing | candidate tools (suggested, **not yet piloted**, decision O-005): Stryker.NET for C# and StrykerJS (stryker-mutator/stryker-js, Apache-2.0) for TypeScript; versions, test-runner support and runtime to be verified | tool, operator set, scope, timeout |
 
 Community Build vs. Server/Cloud feature differences (e.g., branch analysis, security-focused rules) can change findings. The edition used is a research variable that must be disclosed.
 
@@ -92,7 +92,7 @@ Convention: **Source** is the system that produces the value. **Type** = *observ
 | Line coverage | `line_coverage` (and `coverage`) | Generated tests only; computed by the pinned coverage tool and imported into Sonar. Coverage is *execution*, not *verification*. |
 | Branch coverage | `branch_coverage` | As above. |
 | Test execution success | `tests`, `test_failures`, `test_errors`, `skipped_tests`, `test_success_density` | From imported test reports; skipped tests tracked to detect "disabled test" gaming. |
-| Independent test effectiveness | Mutation score = killed mutants ÷ (total − equivalent/ignored), on a defined scope, using the generated test suite | PIT / StrykerJS candidates. Slow; equivalent mutants and timeouts distort the score; the scope (e.g., domain/service layer) is fixed in advance. |
+| Independent test effectiveness | Mutation score = killed mutants ÷ (total − equivalent/ignored), on a defined scope, using the generated test suite | Stryker.NET / StrykerJS candidates. Slow; equivalent mutants and timeouts distort the score; the scope (e.g., domain/service layer) is fixed in advance. |
 | Hidden-suite vs generated-suite divergence | Cases where generated tests pass but the hidden suite fails | Direct evidence of test inadequacy; measured by comparing the two sets of results. |
 | Test code share | LOC in tests ÷ total LOC | To detect tests inflating size/coverage; code and test LOC reported separately where the scanner supports test-source separation. |
 
@@ -116,7 +116,7 @@ Convention: **Source** is the system that produces the value. **Type** = *observ
 ## 3. Data sources and storage
 
 - **SonarQube Web API** (project measures via `api/measures/component`, issues via `api/issues/search`, gate status via `api/qualitygates/project_status`) → raw JSON archived.
-- **Test and coverage reports** (JUnit XML, JaCoCo/Istanbul/Cobertura formats) archived unmodified.
+- **Test and coverage reports** (JUnit/TRX XML, Cobertura/LCOV formats) archived unmodified.
 - **Mutation-testing reports** archived unmodified.
 - **Provider usage logs**: raw API response usage objects per call.
 - **Harness transcripts and tool logs**.
