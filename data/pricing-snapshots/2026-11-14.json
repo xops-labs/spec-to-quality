@@ -1,0 +1,289 @@
+{
+  "schema_version": "0.1-draft",
+  "snapshot_id": "2026-11-14",
+  "checked_at": "2026-11-14 (America/Detroit; prices read from official pages the same day)",
+  "checked_by": "Phase 1 literature/tool research (manual read of official pages; no API calls made)",
+  "currency": "USD",
+  "unit": "per 1,000,000 tokens",
+  "notes": [
+    "List prices read from official provider documentation pages on the check date. Not invoice-verified.",
+    "Prices are a snapshot only; Phase 4 must re-snapshot immediately before each execution batch and record provider-reported usage per call.",
+    "Tier labels are a proposed pre-registration rule based on list output price (low <= 2.50, mid 5-15, premium >= 20 USD/MTok) and are NOT a capability ranking."
+  ],
+  "models": [
+    {
+      "provider": "Anthropic",
+      "model_id": "claude-haiku-5-5",
+      "tier_proposed": "low",
+      "input": 0.1,
+      "cached_input_read": 0.01,
+      "cache_write_5m": 0.125,
+      "output": 0.5,
+      "pricing_conditions": "Prompts over 100,000 tokens: input 0.50, cache read 0.05, 5m cache write 0.625, output 2.50 (priced per request).",
+      "context_window": "1M tokens",
+      "default_effort": "medium",
+      "id_is_pinned_snapshot": true,
+      "sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing",
+        "https://platform.claude.com/docs/en/about-claude/models/overview"
+      ]
+    },
+    {
+      "provider": "Anthropic",
+      "model_id": "claude-sonnet-5-5",
+      "tier_proposed": "mid",
+      "input": 2.0,
+      "cached_input_read": 0.1,
+      "cache_write_5m": 2.5,
+      "output": 10.0,
+      "pricing_conditions": "Standard price; 1M context at standard price.",
+      "context_window": "1M tokens",
+      "default_effort": "high",
+      "id_is_pinned_snapshot": true,
+      "sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing",
+        "https://platform.claude.com/docs/en/about-claude/models/overview"
+      ]
+    },
+    {
+      "provider": "Anthropic",
+      "model_id": "claude-opus-5-5",
+      "tier_proposed": "premium",
+      "input": 4.0,
+      "cached_input_read": 0.2,
+      "cache_write_5m": 5.0,
+      "output": 20.0,
+      "pricing_conditions": "Standard price; 1M context at standard price.",
+      "context_window": "1M tokens",
+      "default_effort": "medium",
+      "id_is_pinned_snapshot": true,
+      "sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing",
+        "https://platform.claude.com/docs/en/about-claude/models/overview"
+      ]
+    },
+    {
+      "provider": "Anthropic",
+      "model_id": "claude-fable-5-2",
+      "tier_proposed": "reserve (above premium)",
+      "input": 8.0,
+      "cached_input_read": 0.2,
+      "cache_write_5m": 10.0,
+      "output": 40.0,
+      "pricing_conditions": "Standard price.",
+      "context_window": "1M tokens",
+      "default_effort": "high",
+      "id_is_pinned_snapshot": true,
+      "sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing",
+        "https://platform.claude.com/docs/en/about-claude/models/overview"
+      ]
+    },
+    {
+      "provider": "OpenAI",
+      "model_id": "gpt-6-luna",
+      "tier_proposed": "low",
+      "input": 0.1,
+      "cached_input_read": 0.01,
+      "cache_write_30m": 0.125,
+      "output": 0.5,
+      "pricing_conditions": "Prompts over 272K input tokens: 2x input/cache rates and 1.5x output for the full request. Batch/Flex 50% of Standard; Fast 2x.",
+      "context_window": "1,050,000 tokens",
+      "default_effort": "medium",
+      "default_snapshot": "gpt-6-luna",
+      "knowledge_cutoff": "2026-05-18",
+      "sources": [
+        "https://developers.openai.com/api/docs/pricing",
+        "https://developers.openai.com/api/docs/models/gpt-6-luna"
+      ]
+    },
+    {
+      "provider": "OpenAI",
+      "model_id": "gpt-6.1-sol",
+      "tier_proposed": "mid",
+      "input": 2.0,
+      "cached_input_read": 0.1,
+      "cache_write_30m": 2.5,
+      "output": 10.0,
+      "pricing_conditions": "Prompts over 272K input tokens: 2x input/cache rates and 1.5x output for the full request. Batch/Flex 50% of Standard; Fast 2x; Ultrafast 6x.",
+      "context_window": "1,050,000 tokens",
+      "default_effort": "medium",
+      "default_snapshot": "gpt-6.1-sol",
+      "knowledge_cutoff": "2026-04-30",
+      "sources": [
+        "https://developers.openai.com/api/docs/pricing",
+        "https://developers.openai.com/api/docs/models/gpt-6.1-sol"
+      ]
+    },
+    {
+      "provider": "OpenAI",
+      "model_id": "gpt-6-astra",
+      "tier_proposed": "premium",
+      "input": 10.0,
+      "cached_input_read": 1.0,
+      "cache_write_30m": 12.5,
+      "output": 50.0,
+      "pricing_conditions": "Prompts over 272K input tokens: 2x input/cache rates and 1.5x output for the full request. Batch/Flex 50% of Standard; Fast 2x.",
+      "context_window": "1,050,000 tokens",
+      "default_effort": "not stated on model page (supports low, medium, high, xhigh, max)",
+      "default_snapshot": "gpt-6-astra",
+      "knowledge_cutoff": "2026-04-30",
+      "sources": [
+        "https://developers.openai.com/api/docs/pricing",
+        "https://developers.openai.com/api/docs/models/gpt-6-astra"
+      ]
+    },
+    {
+      "provider": "Google",
+      "model_id": "gemini-3.5-flash-lite",
+      "tier_proposed": "low (reserve)",
+      "input": 0.3,
+      "cached_input_read": 0.03,
+      "output": 2.5,
+      "pricing_conditions": "Context cache storage $1.00 per 1M tokens per hour.",
+      "context_window": "see model page",
+      "status": "Stable per model page; latest update July 2026",
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash-lite"
+      ]
+    },
+    {
+      "provider": "Google",
+      "model_id": "gemini-4-hydrogen",
+      "tier_proposed": "mid",
+      "input": 1.5,
+      "cached_input_read": 0.075,
+      "output": 7.5,
+      "pricing_conditions": "Implicit caching only. Output price includes thinking tokens.",
+      "context_window": "1,048,576 tokens (unified input+output)",
+      "status": "Stable per model page; latest update November 2026",
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-4-hydrogen"
+      ]
+    },
+    {
+      "provider": "Google",
+      "model_id": "gemini-4-argon",
+      "tier_proposed": "reserve",
+      "input": 2.0,
+      "cached_input_read": 0.1,
+      "output": 10.0,
+      "pricing_conditions": "PROMOTIONAL through 2026-11-30. From 2026-12-01: input 4.00, cached 0.20, output 20.00. Implicit caching only.",
+      "price_change_date": "2026-12-01",
+      "post_change": {
+        "input": 4.0,
+        "cached_input_read": 0.2,
+        "output": 20.0
+      },
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing"
+      ]
+    },
+    {
+      "provider": "Google",
+      "model_id": "gemini-4-carbon",
+      "tier_proposed": "premium",
+      "input": 2.0,
+      "cached_input_read": 0.1,
+      "output": 10.0,
+      "pricing_conditions": "PROMOTIONAL through 2026-11-30. From 2026-12-01: input 4.00, cached 0.20, output 20.00. Not available on free tier. Implicit caching only. Output includes thinking tokens.",
+      "price_change_date": "2026-12-01",
+      "post_change": {
+        "input": 4.0,
+        "cached_input_read": 0.2,
+        "output": 20.0
+      },
+      "status": "Stable per model page; latest update November 2026",
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-4-carbon"
+      ]
+    },
+    {
+      "provider": "xAI (docs now branded SpaceXAI)",
+      "model_id": "grok-build-0.1",
+      "tier_proposed": "low (reserve)",
+      "input": 1.0,
+      "cached_input_read": 0.2,
+      "output": 2.0,
+      "pricing_conditions": "Prompts >= 200k tokens: input 2.00, cached 0.40, output 4.00 for the full request. Aliases listed by xAI: grok-code-fast-1, grok-code-fast, grok-code-fast-1-0825. Batch API not supported.",
+      "context_window": "256k tokens",
+      "sources": [
+        "https://docs.x.ai/developers/models",
+        "https://docs.x.ai/developers/models/grok-build-0.1"
+      ]
+    },
+    {
+      "provider": "xAI (docs now branded SpaceXAI)",
+      "model_id": "grok-4.7",
+      "tier_proposed": "mid",
+      "input": 2.0,
+      "cached_input_read": 0.5,
+      "output": 6.0,
+      "pricing_conditions": "Prompts >= 200k tokens: input 4.00, cached 1.00, output 12.00 for the full request. Batch API 20% discount. xAI docs name Grok 4.7 as its recommended model for code.",
+      "context_window": "500k tokens",
+      "default_effort": "high (supports low, medium, high, xhigh)",
+      "knowledge_cutoff": "May 2026 (per xAI docs)",
+      "sources": [
+        "https://docs.x.ai/developers/models",
+        "https://docs.x.ai/developers/models/grok-4.7"
+      ]
+    },
+    {
+      "provider": "DeepSeek",
+      "model_id": "deepseek-flash",
+      "model_version_label": "DeepSeek-V4.1-Flash-1017",
+      "tier_proposed": "low (open-weight)",
+      "input_peak": 0.3,
+      "input_offpeak": 0.15,
+      "cached_input_read_peak": 0.006,
+      "cached_input_read_offpeak": 0.003,
+      "output_peak": 1.2,
+      "output_offpeak": 0.6,
+      "pricing_conditions": "Time-of-day pricing: peak hours are 01:00-04:00 and 06:00-10:00 UTC, Monday-Friday excluding Chinese public holidays; off-peak is half of peak. Legacy names deepseek-v4-flash / deepseek-v4-flash-vision-exp are served by this model.",
+      "context_window": "1M tokens",
+      "open_weights": true,
+      "weights_license": "MIT (per Hugging Face repo metadata, 2026-11-14)",
+      "weights": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017",
+      "sources": [
+        "https://api-docs.deepseek.com/quick_start/pricing",
+        "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017"
+      ]
+    },
+    {
+      "provider": "DeepSeek",
+      "model_id": "deepseek-v4-pro",
+      "model_version_label": "DeepSeek-V4-Pro-0813",
+      "tier_proposed": "low-mid (open-weight, reserve)",
+      "input_peak": 1.32,
+      "input_offpeak": 0.66,
+      "cached_input_read_peak": 0.044,
+      "cached_input_read_offpeak": 0.022,
+      "output_peak": 3.96,
+      "output_offpeak": 1.98,
+      "pricing_conditions": "Same peak/off-peak schedule as deepseek-flash. Vision not supported.",
+      "context_window": "1M tokens",
+      "open_weights": true,
+      "weights_license": "MIT (per Hugging Face repo metadata, 2026-11-14)",
+      "weights": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
+      "sources": [
+        "https://api-docs.deepseek.com/quick_start/pricing",
+        "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813"
+      ]
+    },
+    {
+      "provider": "Mistral",
+      "model_id": "mistral-large-4",
+      "tier_proposed": "mid (reserve; ID not shown on pricing page)",
+      "input": 0.7,
+      "cached_input_read": 0.07,
+      "output": 2.1,
+      "pricing_conditions": "Listed as 'Mistral Large 4' on the pricing page; the API model ID string was NOT verified on that page.",
+      "sources": [
+        "https://docs.mistral.ai/inference/pricing"
+      ]
+    }
+  ]
+}
